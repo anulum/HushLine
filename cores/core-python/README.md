@@ -1,16 +1,6 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
-# Commercial license available
-# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
-# © Code 2020–2026 Miroslav Šotek. All rights reserved.
-# ORCID: 0009-0009-3560-0851
-# Contact: www.anulum.li | protoscience@anulum.li
-# HUSHLINE — Python core notes
+Hushline Python Core is a compact implementation of the Hushline command contract, intended for integration into larger agent workflows.
 
-# Hushline Python Core
-
-This folder contains a publishable Python implementation of the Hushline contract.
-
-## Install from PyPI
+## Install
 
 ```bash
 python -m pip install --upgrade hushline
@@ -52,3 +42,13 @@ and then trigger manually or publish with a GitHub release.
 ## Implementation
 
 `--pipe-errors` controls stderr shaping; `--raw` bypasses the regex filters.
+
+---
+
+## SPDX-License-Identifier: AGPL-3.0-or-later
+## Commercial license available
+## © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+## © Code 2020–2026 Miroslav Šotek. All rights reserved.
+## ORCID: 0009-0009-3560-0851
+## Contact: www.anulum.li | protoscience@anulum.li
+## Hushline
