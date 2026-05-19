@@ -25,6 +25,8 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     runs-on: ubuntu-latest
     environment:
       name: github-pages

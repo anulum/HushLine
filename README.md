@@ -104,10 +104,12 @@ Example config:
 
 ## Notes for integration
 
+- Repository (public): https://github.com/anulum/HushLine
+- GitHub Pages: https://anulum.github.io/HushLine/
 - Use `hushline mute` at the boundary of any command execution stage.
 - Keep `~/.config/hushline` and `.hushline` local for private environments.
 - Keep redaction rules strict and reviewed.
-- Keep the repository checked out as `03_CODE/HUSHLINE` for enterprise path rules.
+- Keep the repository checked out as `03_CODE/HushLine` for enterprise path rules.
 
 ## Polyglot integration
 

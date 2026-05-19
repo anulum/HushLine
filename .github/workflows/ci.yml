@@ -17,6 +17,8 @@ on:
 
 jobs:
   test-and-build:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     runs-on: ubuntu-latest
     steps:
       - name: checkout
