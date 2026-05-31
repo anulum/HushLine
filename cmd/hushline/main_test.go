@@ -4,20 +4,14 @@
 // © Code 2020–2026 Miroslav Šotek. All rights reserved.
 // ORCID: 0009-0009-3560-0851
 // Contact: www.anulum.li | protoscience@anulum.li
-// HUSHLINE — Command entry point
+// HUSHLINE — command entry point tests
 
 package main
 
-import (
-	"os"
+import "testing"
 
-	"github.com/local/hushline/internal/engine"
-)
-
-func main() {
-	os.Exit(run(os.Args[1:]))
-}
-
-func run(argv []string) int {
-	return engine.Run(argv)
+func TestRunDelegatesArgumentsToEngine(t *testing.T) {
+	if exitCode := run([]string{"version"}); exitCode != 0 {
+		t.Fatalf("run(version) = %d, want 0", exitCode)
+	}
 }

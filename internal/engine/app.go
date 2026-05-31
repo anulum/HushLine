@@ -83,7 +83,10 @@ func manifestCommand(argv []string) int {
 	fs.SetOutput(io.Discard)
 	useGlobal := fs.Bool("global", false, "write global profile")
 	useLocal := fs.Bool("local", false, "write local profile")
-	_ = fs.Parse(argv[1:])
+	if err := fs.Parse(argv[1:]); err != nil {
+		fmt.Fprintf(os.Stderr, "manifest options: %v\n", err)
+		return 2
+	}
 
 	if err := emitProfile(*useGlobal, *useLocal, cwd); err != nil {
 		fmt.Fprintf(os.Stderr, "manifest init: %v\n", err)

@@ -63,8 +63,8 @@ func Through(ctx context.Context, command string, args []string, outWriter io.Wr
 		go io.Copy(io.Discard, stderr)
 	}
 
-	waitErr := cmd.Wait()
 	wg.Wait()
+	waitErr := cmd.Wait()
 
 	if waitErr == nil {
 		return PipeOutcome{ExitCode: 0}, nil
@@ -82,22 +82,35 @@ func Through(ctx context.Context, command string, args []string, outWriter io.Wr
 }
 
 func stream(r io.Reader, w io.Writer, muterEngine *muter.Muter, maxLines int) {
-	sc := bufio.NewScanner(r)
+	reader := bufio.NewReader(r)
 	count := 0
 	truncated := false
-	for sc.Scan() {
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil && err != io.EOF {
+			fmt.Fprintf(w, "[hushline stream error: %v]\n", err)
+			return
+		}
+		if line == "" && err == io.EOF {
+			return
+		}
 		if maxLines > 0 && count >= maxLines {
 			if !truncated {
 				fmt.Fprintln(w, "[output truncated]")
 				truncated = true
 			}
+			if err == io.EOF {
+				return
+			}
 			continue
 		}
-		line := sc.Text()
 		if muterEngine != nil {
 			line = muterEngine.Apply(line)
 		}
 		fmt.Fprintln(w, strings.TrimRight(line, "\n"))
 		count++
+		if err == io.EOF {
+			return
+		}
 	}
 }

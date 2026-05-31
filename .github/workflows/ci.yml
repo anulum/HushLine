@@ -30,10 +30,18 @@ jobs:
           cache: false
       - name: go version
         run: go version
+      - name: verify go tests exist
+        run: bash tools/check_go_test_files.sh
       - name: go build
-        run: go build ./...
+        run: go build -buildvcs=false ./...
+      - name: go vet
+        run: go vet ./...
       - name: go test
-        run: go test ./...
+        run: go test -race -covermode=atomic -coverprofile=/tmp/hushline_coverage.out ./...
+      - name: verify go coverage
+        run: bash tools/check_go_coverage.sh /tmp/hushline_coverage.out 95.0
+      - name: generate release evidence
+        run: bash tools/build_go_release_evidence.sh ci
       - name: verify fmt
         run: |
           test -z "$(gofmt -s -l . | tee /tmp/gofmt.out && cat /tmp/gofmt.out)"

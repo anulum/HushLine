@@ -32,6 +32,16 @@ type QuietRule struct {
 	Replacement string `json:"replacement"`
 }
 
+type profilePatch struct {
+	MaxOutputLines *int        `json:"max_lines"`
+	MaxLineWidth   *int        `json:"line_width"`
+	StripANSI      *bool       `json:"strip_ansi"`
+	PreserveErrors *bool       `json:"preserve_errors"`
+	RequirePermit  *bool       `json:"require_permit"`
+	MaskPatterns   []string    `json:"mask_patterns"`
+	QuietRules     []QuietRule `json:"silence_rules"`
+}
+
 func DefaultProfile() Config {
 	return Config{
 		MaxOutputLines: 2000,
@@ -67,13 +77,13 @@ func LoadProfile(cwd string) (Config, error) {
 			}
 			return cfg, fmt.Errorf("failed reading config %q: %w", p, err)
 		}
-		merge(&cfg, next)
+		mergePatch(&cfg, next)
 	}
 	return cfg, nil
 }
 
-func readProfileFile(path string) (Config, error) {
-	var out Config
+func readProfileFile(path string) (profilePatch, error) {
+	var out profilePatch
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return out, err
@@ -98,21 +108,21 @@ func WriteProfile(path string) error {
 	return os.WriteFile(path, append(blob, '\n'), 0o600)
 }
 
-func merge(base *Config, next Config) {
-	if next.MaxOutputLines > 0 {
-		base.MaxOutputLines = next.MaxOutputLines
+func mergePatch(base *Config, next profilePatch) {
+	if next.MaxOutputLines != nil && *next.MaxOutputLines > 0 {
+		base.MaxOutputLines = *next.MaxOutputLines
 	}
-	if next.MaxLineWidth >= 0 {
-		base.MaxLineWidth = next.MaxLineWidth
+	if next.MaxLineWidth != nil && *next.MaxLineWidth >= 0 {
+		base.MaxLineWidth = *next.MaxLineWidth
 	}
-	if next.StripANSI {
-		base.StripANSI = true
+	if next.StripANSI != nil {
+		base.StripANSI = *next.StripANSI
 	}
-	if next.PreserveErrors {
-		base.PreserveErrors = true
+	if next.PreserveErrors != nil {
+		base.PreserveErrors = *next.PreserveErrors
 	}
-	if next.RequirePermit {
-		base.RequirePermit = true
+	if next.RequirePermit != nil {
+		base.RequirePermit = *next.RequirePermit
 	}
 	if len(next.MaskPatterns) > 0 {
 		base.MaskPatterns = append(base.MaskPatterns, next.MaskPatterns...)
