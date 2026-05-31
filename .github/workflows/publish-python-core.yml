@@ -20,6 +20,9 @@ permissions:
 
 jobs:
   publish:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'python-core-v')
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,3 +45,4 @@ jobs:
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
           packages-dir: cores/core-python/dist
+          skip-existing: true
