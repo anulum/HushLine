@@ -130,4 +130,6 @@ Example config:
 
 For deeper usage details, see:
 
-`docs/guide.md`
+- `docs/guide.md`
+- `docs/development.md`
+- `docs/release.md`

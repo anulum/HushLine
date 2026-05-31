@@ -75,3 +75,8 @@ hushline mute --timeout 30 --max-lines 1500 -- /usr/bin/python3 -m example.task
 ```
 
 Use this command shape wherever prompt-chain stages execute shell commands.
+
+## Project operations
+
+- Development and verification gates: `docs/development.md`.
+- Release evidence process: `docs/release.md`.
