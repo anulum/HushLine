@@ -48,5 +48,10 @@ Before publishing a GitHub release:
 
 ## Python package publication
 
-The Python package workflow publishes only on a GitHub release event or manual
-dispatch. It requires `PYPI_API_TOKEN` to be configured as a repository secret.
+The Python package workflow publishes on manual dispatch or release tags that
+start with `python-core-v`. General Hushline CLI releases do not publish Python
+distributions.
+
+It requires `PYPI_API_TOKEN` to be configured as a repository secret. Existing
+distribution files are skipped so a repeat publication attempt does not fail
+because PyPI already has the same immutable artefact.
