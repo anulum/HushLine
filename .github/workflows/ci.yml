@@ -1,0 +1,47 @@
+---
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commercial license available
+# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+# © Code 2020–2026 Miroslav Šotek. All rights reserved.
+# ORCID: 0009-0009-3560-0851
+# Contact: www.anulum.li | protoscience@anulum.li
+# HUSHLINE — CI workflow
+
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-and-build:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: go version
+        run: go version
+      - name: verify go tests exist
+        run: bash tools/check_go_test_files.sh
+      - name: go build
+        run: go build -buildvcs=false ./...
+      - name: go vet
+        run: go vet ./...
+      - name: go test
+        run: go test -race -covermode=atomic -coverprofile=/tmp/hushline_coverage.out ./...
+      - name: verify go coverage
+        run: bash tools/check_go_coverage.sh /tmp/hushline_coverage.out 95.0
+      - name: generate release evidence
+        run: bash tools/build_go_release_evidence.sh ci
+      - name: verify fmt
+        run: |
+          test -z "$(gofmt -s -l . | tee /tmp/gofmt.out && cat /tmp/gofmt.out)"

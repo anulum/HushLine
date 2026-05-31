@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commercial license available
+# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+# © Code 2020–2026 Miroslav Šotek. All rights reserved.
+# ORCID: 0009-0009-3560-0851
+# Contact: www.anulum.li | protoscience@anulum.li
+# HUSHLINE — Python core project metadata
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hushline"
+version = "0.1.4"
+description = "Python implementation of the Hushline command contract."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "AGPL-3.0-or-later" }
+authors = [
+  { name = "Arcane Sapience", email = "protoscience@anulum.li" }
+]
+keywords = ["hushline", "command-output", "prompt-automation", "privacy"]
+classifiers = [
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+urls.homepage = "https://github.com/anulum/HushLine"
+
+[project.scripts]
+hushline-python-core = "hushline_core.__main__:main"
+hushline = "hushline_core.__main__:main"
+
+[project.optional-dependencies]
+dev = [
+  "build",
+  "twine",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
