@@ -8,19 +8,18 @@
 
 # Hushline Go Core
 
-This is the canonical Go reference core boundary.
+This is the canonical Go reference core. Its implementation lives at the
+repository root and is the behaviour authority for every other core:
 
-Planned layout:
+- `cmd/hushline/` — command bootstrap.
+- `pkg/hushline/{config,muter,pipeline,engine,version}` — engine implementation.
 
-- `src/` — command and engine implementation (to be migrated from root `cmd/` and `pkg/hushline/`).
-- `go.mod` — explicit module definition for this core.
-- `build.sh` — local build script.
-
-Build command (placeholder):
+Build and test from the repository root:
 
 ```bash
-cd core-go
-go build ./...
+go build -buildvcs=false ./...
+go test -race ./...
 ```
 
-This folder is currently scaffold-only until migration is approved.
+`build.sh` here is a thin convenience wrapper. The Go core is not duplicated
+under `core-go/src/` so that Go behaviour has a single source of truth.

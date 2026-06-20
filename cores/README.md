@@ -13,10 +13,15 @@ to avoid cross-language mixing.
 
 ## Active core map
 
-- `core-go/` — Go reference implementation (current behavior source)
-- `core-rust/` — Rust isolation candidate
-- `core-python/` — Python isolation candidate
-- `core-node/` — Node/TypeScript isolation candidate
+- `core-go/` — Go reference implementation; the behaviour authority lives at the
+  repository root (`cmd/hushline`, `pkg/hushline`).
+- `core-rust/` — Rust implementation (regex + serde), built as the `hushline` binary.
+- `core-python/` — Python implementation (`hushline_core`), published to PyPI as `hushline`.
+- `core-node/` — Node/TypeScript implementation, `hushline` bin target.
+
+Each core is a standalone package: pick one language and deploy it without the
+others. All four pass the same contract test suite; measured per-core latency is
+in the benchmark table in `docs/guide.md`.
 
 ## Core contract
 

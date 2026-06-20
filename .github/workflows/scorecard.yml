@@ -1,0 +1,49 @@
+---
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commercial license available
+# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+# © Code 2020–2026 Miroslav Šotek. All rights reserved.
+# ORCID: 0009-0009-3560-0851
+# Contact: www.anulum.li | protoscience@anulum.li
+# HUSHLINE — OpenSSF Scorecard supply-chain analysis
+
+name: scorecard
+
+on:
+  branch_protection_rule:
+  schedule:
+    - cron: "31 4 * * 1"
+  push:
+    branches:
+      - main
+
+permissions: read-all
+
+jobs:
+  analysis:
+    name: scorecard analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: run analysis
+        uses: ossf/scorecard-action@v2
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scorecard-results
+          path: results.sarif
+          retention-days: 5
+      - name: upload sarif
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
