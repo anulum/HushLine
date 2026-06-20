@@ -135,6 +135,23 @@ Example config:
 - Keep `~/.config/hushline` and `.hushline` local for private environments.
 - Keep redaction rules strict and reviewed.
 
+## Use as a GitHub Action
+
+Run any command through Hushline in a workflow so secrets (`sk-…`, `AKIA…`),
+ANSI escapes, and noise are muted before they reach the CI log:
+
+```yaml
+- name: Plan with muted output
+  uses: anulum/HushLine@v0
+  with:
+    command: terraform plan
+```
+
+Inputs: `command` (required), `max-lines`, `max-width`, `timeout`, `raw`,
+`pipe-errors`, `working-directory`. The action builds the Go core from source, so
+the runner needs Go (preinstalled on GitHub-hosted runners; otherwise add
+`actions/setup-go` first).
+
 ## Polyglot cores
 
 The same command contract is implemented by four independent cores. Each is a
@@ -158,3 +175,17 @@ For deeper usage details, see:
 - `docs/development.md`
 - `docs/release.md`
 - `docs/benchmarks.md`
+
+## Support
+
+Hushline is free and open source under AGPL-3.0. If it saves you from leaking a
+secret in a log, consider supporting its upkeep:
+
+- GitHub Sponsors: https://github.com/sponsors/anulum
+- Buy Me a Coffee: https://buymeacoffee.com/anulum
+
+<p align="center">
+  <a href="https://buymeacoffee.com/anulum"><img src="docs/assets/bmc_qr.png" width="160" alt="Buy Me a Coffee — buymeacoffee.com/anulum"></a>
+</p>
+
+A commercial licence is also available; contact protoscience@anulum.li.

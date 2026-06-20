@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commercial license available
+# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+# © Code 2020–2026 Miroslav Šotek. All rights reserved.
+# ORCID: 0009-0009-3560-0851
+# Contact: www.anulum.li | protoscience@anulum.li
+# HUSHLINE — GitHub Action metadata
+---
+name: "Hushline Output Muting"
+description: "Run a command and mute, redact, and bound its stdout/stderr (secrets, ANSI, noise) before it reaches the CI log."
+author: "Arcane Sapience"
+
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  command:
+    description: "The command to run with its output muted (executed with bash -c)."
+    required: true
+  max-lines:
+    description: "Maximum output lines before truncation (0 keeps the profile default)."
+    required: false
+    default: "0"
+  max-width:
+    description: "Maximum line width in bytes (0 disables width truncation)."
+    required: false
+    default: "0"
+  timeout:
+    description: "Timeout in seconds for the command (0 disables the timeout)."
+    required: false
+    default: "0"
+  raw:
+    description: "If true, bypass redaction and shaping (output passes through unchanged)."
+    required: false
+    default: "false"
+  pipe-errors:
+    description: "If true, shape stderr through the muter; if false, discard stderr."
+    required: false
+    default: "true"
+  working-directory:
+    description: "Directory in which to run the command."
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build Hushline
+      shell: bash
+      run: |
+        if ! command -v go >/dev/null 2>&1; then
+          echo "::error::Hushline action requires Go on the runner. Add 'actions/setup-go' before this step, or use a GitHub-hosted runner."
+          exit 1
+        fi
+        go build -buildvcs=false -o "${GITHUB_ACTION_PATH}/hushline" "${GITHUB_ACTION_PATH}/cmd/hushline"
+    - name: Run command through Hushline
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        HL_COMMAND: ${{ inputs.command }}
+        HL_RAW: ${{ inputs.raw }}
+        HL_PIPE_ERRORS: ${{ inputs.pipe-errors }}
+        HL_MAX_LINES: ${{ inputs.max-lines }}
+        HL_MAX_WIDTH: ${{ inputs.max-width }}
+        HL_TIMEOUT: ${{ inputs.timeout }}
+      run: |
+        hl="${GITHUB_ACTION_PATH}/hushline"
+        args=(mute)
+        [ "${HL_RAW}" = "true" ] && args+=(--raw)
+        args+=("--pipe-errors=${HL_PIPE_ERRORS}")
+        [ "${HL_MAX_LINES}" != "0" ] && args+=(--max-lines "${HL_MAX_LINES}")
+        [ "${HL_MAX_WIDTH}" != "0" ] && args+=(--max-width "${HL_MAX_WIDTH}")
+        [ "${HL_TIMEOUT}" != "0" ] && args+=(--timeout "${HL_TIMEOUT}")
+        "$hl" "${args[@]}" -- bash -c "$HL_COMMAND"
