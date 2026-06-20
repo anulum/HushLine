@@ -44,6 +44,11 @@ SPDX-FileCopyrightText = "2020-2026 Miroslav Šotek"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
+path = "docs/assets/**"
+SPDX-FileCopyrightText = "2020-2026 Miroslav Šotek"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
 path = "**/*.yml"
 SPDX-FileCopyrightText = "2020-2026 Miroslav Šotek"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

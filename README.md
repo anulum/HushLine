@@ -6,7 +6,9 @@
 <!-- Contact: www.anulum.li | protoscience@anulum.li -->
 <!-- HUSHLINE — public documentation -->
 
-# Hushline
+<p align="center">
+  <img src="docs/assets/hushline_header.png" width="100%" alt="Hushline — local command-output muting across four independent cores (Go, Rust, Python, Node)">
+</p>
 
 <p align="center">
   <a href="https://github.com/anulum/HushLine/actions/workflows/ci.yml"><img src="https://github.com/anulum/HushLine/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
