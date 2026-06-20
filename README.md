@@ -16,6 +16,7 @@
   <a href="https://github.com/anulum/HushLine/actions/workflows/scorecard.yml"><img src="https://github.com/anulum/HushLine/actions/workflows/scorecard.yml/badge.svg" alt="Scorecard"></a>
   <a href="https://securityscorecards.dev/viewer/?uri=github.com/anulum/HushLine"><img src="https://api.securityscorecards.dev/projects/github.com/anulum/HushLine/badge" alt="OpenSSF Scorecard"></a>
   <a href="https://www.bestpractices.dev/projects/13319"><img src="https://www.bestpractices.dev/projects/13319/badge" alt="OpenSSF Best Practices"></a>
+  <a href="https://github.com/marketplace/actions/hushline-output-muting"><img src="https://img.shields.io/badge/Marketplace-Hushline-2ea44f?logo=github" alt="GitHub Marketplace"></a>
   <a href="https://pypi.org/project/hushline/"><img src="https://img.shields.io/pypi/v/hushline.svg" alt="PyPI"></a>
   <a href="https://pypi.org/project/hushline/"><img src="https://img.shields.io/pypi/pyversions/hushline.svg" alt="Python"></a>
   <a href="https://codecov.io/gh/anulum/HushLine"><img src="https://codecov.io/gh/anulum/HushLine/branch/main/graph/badge.svg" alt="Coverage"></a>
@@ -137,6 +138,8 @@ Example config:
 
 ## Use as a GitHub Action
 
+Available on the
+[GitHub Marketplace](https://github.com/marketplace/actions/hushline-output-muting).
 Run any command through Hushline in a workflow so secrets (`sk-…`, `AKIA…`),
 ANSI escapes, and noise are muted before they reach the CI log:
 
