@@ -1,0 +1,41 @@
+{
+  "hardware": {
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11600K @ 3.90GHz",
+    "logical_cores": 12
+  },
+  "workload": {
+    "lines": 20000,
+    "bytes": 1036890
+  },
+  "repetitions": 7,
+  "parity": {
+    "identical": true,
+    "reference_core": "go"
+  },
+  "results": [
+    {
+      "core": "go",
+      "median_seconds": 0.012849,
+      "min_seconds": 0.011475,
+      "throughput_mb_s": 80.696
+    },
+    {
+      "core": "rust",
+      "median_seconds": 0.005065,
+      "min_seconds": 0.004906,
+      "throughput_mb_s": 204.706
+    },
+    {
+      "core": "python",
+      "median_seconds": 0.059849,
+      "min_seconds": 0.057104,
+      "throughput_mb_s": 17.325
+    },
+    {
+      "core": "node",
+      "median_seconds": 0.052939,
+      "min_seconds": 0.046608,
+      "throughput_mb_s": 19.586
+    }
+  ]
+}

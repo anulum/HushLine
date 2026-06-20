@@ -118,17 +118,26 @@ Example config:
 - Keep `~/.config/hushline` and `.hushline` local for private environments.
 - Keep redaction rules strict and reviewed.
 
-## Polyglot integration
+## Polyglot cores
 
-- The enterprise path is language-agnostic by interface:
-  - CLI contract is preserved across implementations.
-  - You can choose a rewrite in Go, Rust, Python, or Node based on latency, embedding, and ops constraints.
-- Reference policy:
-  - [enterprise_polyglot_integration.md](docs/guide.md)
-  - [cores/README.md](cores/README.md)
+The same command contract is implemented by four independent cores. Each is a
+standalone package — pick the one that fits your stack and deploy it without the
+others.
+
+| Core | Install | Notes |
+|------|---------|-------|
+| Go | `go install github.com/anulum/HushLine/cmd/hushline@latest` | reference implementation |
+| Rust | `cargo build --release` in `cores/core-rust` | fastest measured core |
+| Python | `pip install hushline` | standard library only |
+| Node | `npm install` in `cores/core-node` | standard library only |
+
+All four produce byte-identical output. Measured per-core latency is in
+[docs/benchmarks.md](docs/benchmarks.md); the core registry and contract are in
+[cores/README.md](cores/README.md).
 
 For deeper usage details, see:
 
 - `docs/guide.md`
 - `docs/development.md`
 - `docs/release.md`
+- `docs/benchmarks.md`
