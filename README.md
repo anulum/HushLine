@@ -161,7 +161,7 @@ others.
 | Core | Install | Notes |
 |------|---------|-------|
 | Go | `go install github.com/anulum/HushLine/cmd/hushline@latest` | reference implementation |
-| Rust | `cargo build --release` in `cores/core-rust` | fastest measured core |
+| Rust | `cargo install hushline` | fastest measured core |
 | Python | `pip install hushline` | standard library only |
 | Node | `npm install` in `cores/core-node` | standard library only |
 
