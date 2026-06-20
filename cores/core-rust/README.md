@@ -8,19 +8,43 @@
 
 # Hushline Rust Core
 
-Scaffold for a Rust rewrite that must follow the shared Hushline contract.
+A standalone Rust implementation of the Hushline command contract. It is one of
+four independent cores; it shares no runtime artefacts with the Go, Python, or
+Node cores. Observable behaviour — default profile, configuration merge order,
+redaction, ANSI stripping, byte-bounded line truncation, and exit codes —
+matches the Go reference core exactly.
 
-Planned files:
+## Layout
 
-- `src/main.rs` command bootstrap
-- `src/execution.rs` child process shaping
-- `src/config.rs` profile loading + merge
+- `src/main.rs` — console entry point.
+- `src/engine.rs` — command dispatch and Go-style flag parsing.
+- `src/config.rs` — profile defaults, strict JSON parsing, and merge.
+- `src/muter.rs` — ANSI stripping, redaction, and silence rewrites.
+- `src/pipeline.rs` — child execution and output streaming.
 
-Build command:
+## Build
 
 ```bash
-cd core-rust
-cargo build
+cd cores/core-rust
+cargo build --release
+./target/release/hushline version
 ```
 
-This core has no telemetry dependencies.
+## Test
+
+```bash
+cargo test
+cargo clippy --all-targets -- -D warnings
+cargo fmt --check
+```
+
+## Command surface
+
+- `hushline mute [--raw] [--pipe-errors=BOOL] [--max-lines N] [--max-width N] [--timeout N] -- <command> ...`
+- `hushline manifest init [--global|--local]`
+- `hushline manifest show`
+- `hushline permit [status|allow] [path]`
+- `hushline version`
+
+The binary target is named `hushline`. This core has no telemetry or network
+dependencies.
