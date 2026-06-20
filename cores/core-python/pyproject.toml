@@ -12,7 +12,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hushline"
-version = "0.1.4"
+version = "0.1.5"
 description = "Python implementation of the Hushline command contract."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -40,6 +40,8 @@ hushline = "hushline_core.__main__:main"
 dev = [
   "build",
   "twine",
+  "pytest",
+  "pytest-cov",
 ]
 
 [tool.setuptools]
@@ -48,3 +50,19 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+pythonpath = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["hushline_core"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
+exclude_lines = [
+  "if __name__ == .__main__.:",
+]
