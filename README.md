@@ -163,7 +163,7 @@ others.
 | Go | `go install github.com/anulum/HushLine/cmd/hushline@latest` | reference implementation |
 | Rust | `cargo install hushline` | fastest measured core |
 | Python | `pip install hushline` | standard library only |
-| Node | `npm install` in `cores/core-node` | standard library only |
+| Node | `npm install -g hushline` | standard library only |
 
 All four produce byte-identical output. Measured per-core latency is in
 [docs/benchmarks.md](docs/benchmarks.md); the core registry and contract are in
