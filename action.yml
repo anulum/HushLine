@@ -43,6 +43,11 @@ inputs:
     required: false
     default: "."
 
+outputs:
+  output:
+    description: "The shaped (muted) stdout of the command."
+    value: ${{ steps.run.outputs.output }}
+
 runs:
   using: "composite"
   steps:
@@ -55,6 +60,7 @@ runs:
         fi
         go build -buildvcs=false -o "${GITHUB_ACTION_PATH}/hushline" "${GITHUB_ACTION_PATH}/cmd/hushline"
     - name: Run command through Hushline
+      id: run
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -72,4 +78,14 @@ runs:
         [ "${HL_MAX_LINES}" != "0" ] && args+=(--max-lines "${HL_MAX_LINES}")
         [ "${HL_MAX_WIDTH}" != "0" ] && args+=(--max-width "${HL_MAX_WIDTH}")
         [ "${HL_TIMEOUT}" != "0" ] && args+=(--timeout "${HL_TIMEOUT}")
-        "$hl" "${args[@]}" -- bash -c "$HL_COMMAND"
+        set +e
+        muted="$("$hl" "${args[@]}" -- bash -c "$HL_COMMAND")"
+        code=$?
+        set -e
+        printf '%s\n' "$muted"
+        {
+          echo "output<<HUSHLINE_OUTPUT_EOF"
+          printf '%s\n' "$muted"
+          echo "HUSHLINE_OUTPUT_EOF"
+        } >> "$GITHUB_OUTPUT"
+        exit "$code"

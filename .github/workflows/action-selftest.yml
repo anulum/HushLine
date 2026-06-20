@@ -1,0 +1,68 @@
+---
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Commercial license available
+# © Concepts 1996–2026 Miroslav Šotek. All rights reserved.
+# © Code 2020–2026 Miroslav Šotek. All rights reserved.
+# ORCID: 0009-0009-3560-0851
+# Contact: www.anulum.li | protoscience@anulum.li
+# HUSHLINE — self-test for the published GitHub Action
+
+name: action-selftest
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: mute a command that prints a secret
+        id: muted
+        uses: ./
+        with:
+          command: "printf 'token sk-abcdefghijklmnopqrstuvwxyz tail\\n'"
+
+      - name: assert the secret is redacted
+        env:
+          OUT: ${{ steps.muted.outputs.output }}
+        run: |
+          echo "captured output: ${OUT}"
+          echo "${OUT}" | grep -q '\*\*\*' || { echo "::error::no redaction marker in output"; exit 1; }
+          if echo "${OUT}" | grep -q 'sk-abcdefghijklmnopqrstuvwxyz'; then
+            echo "::error::secret leaked through the action"; exit 1
+          fi
+
+      - name: raw mode keeps output verbatim
+        id: rawout
+        uses: ./
+        with:
+          command: "printf 'sk-abcdefghijklmnopqrstuvwxyz\\n'"
+          raw: "true"
+
+      - name: assert raw bypasses redaction
+        env:
+          OUT: ${{ steps.rawout.outputs.output }}
+        run: |
+          echo "${OUT}" | grep -q 'sk-abcdefghijklmnopqrstuvwxyz' || {
+            echo "::error::raw mode should not redact"; exit 1; }
+
+      - name: a failing command
+        id: failer
+        continue-on-error: true
+        uses: ./
+        with:
+          command: "exit 7"
+
+      - name: assert the exit code propagates
+        run: |
+          test "${{ steps.failer.outcome }}" = "failure" || {
+            echo "::error::exit code was not propagated"; exit 1; }
