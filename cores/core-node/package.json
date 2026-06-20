@@ -1,20 +1,4 @@
 {
-  "_spdx_header": [
-    "SPDX-License-Identifier: AGPL-3.0-or-later",
-    "Commercial license available",
-    "© Concepts 1996–2026 Miroslav Šotek. All rights reserved.",
-    "© Code 2020–2026 Miroslav Šotek. All rights reserved.",
-    "ORCID: 0009-0009-3560-0851",
-    "Contact: www.anulum.li | protoscience@anulum.li",
-    "HUSHLINE — core-node manifest"
-  ],
-  "_spdx": {
-    "license": "AGPL-3.0-or-later",
-    "copyright": "© Concepts 1996–2026 Miroslav Šotek. All rights reserved.\n© Code 2020–2026 Miroslav Šotek. All rights reserved.",
-    "orcid": "0009-0009-3560-0851",
-    "contact": "www.anulum.li | protoscience@anulum.li",
-    "project": "HUSHLINE — core-node manifest"
-  },
   "name": "hushline-node-core",
   "version": "0.1.5",
   "description": "Node implementation of the Hushline command contract.",

@@ -8,6 +8,18 @@
 
 # Hushline
 
+<p align="center">
+  <a href="https://github.com/anulum/HushLine/actions/workflows/ci.yml"><img src="https://github.com/anulum/HushLine/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/anulum/HushLine/actions/workflows/pages.yml"><img src="https://github.com/anulum/HushLine/actions/workflows/pages.yml/badge.svg" alt="Pages"></a>
+  <a href="https://github.com/anulum/HushLine/actions/workflows/scorecard.yml"><img src="https://github.com/anulum/HushLine/actions/workflows/scorecard.yml/badge.svg" alt="Scorecard"></a>
+  <a href="https://securityscorecards.dev/viewer/?uri=github.com/anulum/HushLine"><img src="https://api.securityscorecards.dev/projects/github.com/anulum/HushLine/badge" alt="OpenSSF Scorecard"></a>
+  <a href="https://pypi.org/project/hushline/"><img src="https://img.shields.io/pypi/v/hushline.svg" alt="PyPI"></a>
+  <a href="https://pypi.org/project/hushline/"><img src="https://img.shields.io/pypi/pyversions/hushline.svg" alt="Python"></a>
+  <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/license-AGPL_3.0-blue.svg" alt="License: AGPL v3"></a>
+  <a href="https://api.reuse.software/info/github.com/anulum/HushLine"><img src="https://api.reuse.software/badge/github.com/anulum/HushLine" alt="REUSE"></a>
+  <img src="https://img.shields.io/badge/cores-Go_·_Rust_·_Python_·_Node-orange" alt="Cores">
+</p>
+
 ## Local command output muting for prompt chains
 
 `hushline` is a thin, local wrapper that runs any command, then filters and shapes
