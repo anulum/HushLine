@@ -16,13 +16,22 @@
     "project": "HUSHLINE — core-node manifest"
   },
   "name": "hushline-node-core",
-  "version": "0.1.0",
-  "description": "Node core skeleton for Hushline",
+  "version": "0.1.5",
+  "description": "Node implementation of the Hushline command contract.",
+  "license": "AGPL-3.0-or-later",
   "private": true,
-  "main": "dist/index.js",
+  "main": "dist/src/engine.js",
+  "bin": {
+    "hushline": "dist/src/cli.js"
+  },
+  "files": [
+    "dist/src"
+  ],
   "scripts": {
     "build": "tsc -p .",
-    "start": "node dist/index.js"
+    "pretest": "npm run build",
+    "test": "node --test dist/test/*.test.js",
+    "start": "node dist/src/cli.js"
   },
   "devDependencies": {
     "typescript": "^5.8.0",

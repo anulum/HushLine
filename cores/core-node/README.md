@@ -8,27 +8,45 @@
 
 # Hushline Node Core
 
-Scaffold for a Node/TypeScript implementation.
+A standalone Node/TypeScript implementation of the Hushline command contract. It
+is one of four independent cores; it shares no runtime artefacts with the Go,
+Rust, or Python cores and pulls in no runtime dependencies (standard library
+only). Observable behaviour — default profile, configuration merge order,
+redaction, ANSI stripping, byte-bounded line truncation, and exit codes —
+matches the Go reference core exactly.
 
-Planned files:
+## Layout
 
-- `src/cli.ts` CLI parsing and dispatch
-- `src/config.ts` profile loading
-- `src/muter.ts` transform pipeline
-- `src/pipeline.ts` process spawn and streaming
+- `src/cli.ts` — console entry point.
+- `src/engine.ts` — command dispatch and Go-style flag parsing.
+- `src/config.ts` — profile defaults, strict JSON parsing, and merge.
+- `src/muter.ts` — ANSI stripping, redaction, and silence rewrites.
+- `src/pipeline.ts` — child execution and output streaming.
 
-Build command:
+## Build and run
 
 ```bash
-cd core-node
+cd cores/core-node
 npm install
 npm run build
+node dist/src/cli.js version
 ```
 
-Run command:
+## Test
 
 ```bash
-npm run start
+npm test
 ```
 
-No telemetry should be added.
+`npm test` compiles the TypeScript and runs the `node --test` suite.
+
+## Command surface
+
+- `hushline mute [--raw] [--pipe-errors=BOOL] [--max-lines N] [--max-width N] [--timeout N] -- <command> ...`
+- `hushline manifest init [--global|--local]`
+- `hushline manifest show`
+- `hushline permit [status|allow] [path]`
+- `hushline version`
+
+The `bin` entry installs the command as `hushline`. No telemetry or network
+access is present.
