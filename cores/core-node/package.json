@@ -1,9 +1,22 @@
 {
-  "name": "hushline-node-core",
+  "name": "hushline",
   "version": "0.1.5",
   "description": "Node implementation of the Hushline command contract.",
   "license": "AGPL-3.0-or-later",
-  "private": true,
+  "homepage": "https://github.com/anulum/HushLine/tree/main/cores/core-node",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anulum/HushLine.git",
+    "directory": "cores/core-node"
+  },
+  "keywords": [
+    "hushline",
+    "command-output",
+    "redaction",
+    "prompt-automation",
+    "privacy",
+    "cli"
+  ],
   "main": "dist/src/engine.js",
   "bin": {
     "hushline": "dist/src/cli.js"

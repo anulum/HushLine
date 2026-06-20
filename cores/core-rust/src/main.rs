@@ -12,7 +12,7 @@ use std::io;
 use std::path::PathBuf;
 use std::process::exit;
 
-use hushline_rust_core::engine;
+use hushline::engine;
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();

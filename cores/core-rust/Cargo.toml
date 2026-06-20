@@ -7,7 +7,7 @@
 # HUSHLINE — Rust core package manifest
 
 [package]
-name = "hushline-rust-core"
+name = "hushline"
 version = "0.1.5"
 edition = "2021"
 license = "AGPL-3.0-or-later"

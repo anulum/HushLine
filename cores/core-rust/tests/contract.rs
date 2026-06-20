@@ -11,8 +11,8 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Mutex;
 
-use hushline_rust_core::config::{self, Config, QuietRule};
-use hushline_rust_core::{engine, muter, pipeline};
+use hushline::config::{self, Config, QuietRule};
+use hushline::{engine, muter, pipeline};
 
 static ENV_LOCK: Mutex<()> = Mutex::new(());
 static COUNTER: AtomicUsize = AtomicUsize::new(0);
