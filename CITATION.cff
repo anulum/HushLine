@@ -5,8 +5,16 @@ type: software
 version: 0.1.5
 date-released: "2026-06-20"
 license: AGPL-3.0-or-later
+doi: 10.5281/zenodo.20775432
 repository-code: "https://github.com/anulum/HushLine"
 url: "https://anulum.github.io/HushLine/"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20775432
+    description: Concept DOI (resolves to the latest version)
+  - type: doi
+    value: 10.5281/zenodo.20775754
+    description: Version DOI for v0.1.5
 abstract: >-
   Hushline is a local command-output shaping utility. It runs a child command
   and filters, redacts, and bounds its stdout and stderr before the output
