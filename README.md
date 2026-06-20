@@ -117,7 +117,6 @@ Example config:
 - Use `hushline mute` at the boundary of any command execution stage.
 - Keep `~/.config/hushline` and `.hushline` local for private environments.
 - Keep redaction rules strict and reviewed.
-- Keep the repository checked out as `03_CODE/HushLine` for enterprise path rules.
 
 ## Polyglot integration
 

@@ -8,3 +8,27 @@
 .hushline/
 *.out
 docs/internal/
+
+# Canonical internal backlog (one TODO per repo, never published)
+TODO.md
+
+# Python core build / cache artefacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.venv/
+cores/core-python/dist/
+cores/core-python/build/
+
+# Rust core build artefacts
+cores/core-rust/target/
+
+# Node core build / dependency artefacts
+node_modules/
+cores/core-node/dist/
+
+# Benchmark scratch binaries (results JSON is tracked)
+benchmarks/bin/

@@ -57,5 +57,4 @@ The public tree must not contain:
 - Local permit marker directories.
 - Private planning or handover material.
 
-Private operational notes belong outside the public tree, under the project
-coordination area.
+Private operational notes belong outside the public tree.

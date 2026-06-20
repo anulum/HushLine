@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: Hushline
+message: "If you use this software, please cite it as below."
+type: software
+version: 0.1.5
+date-released: "2026-06-20"
+license: AGPL-3.0-or-later
+repository-code: "https://github.com/anulum/HushLine"
+url: "https://anulum.github.io/HushLine/"
+abstract: >-
+  Hushline is a local command-output shaping utility. It runs a child command
+  and filters, redacts, and bounds its stdout and stderr before the output
+  reaches the caller, for deterministic, privacy-aware prompt chains and local
+  automation. The same command contract is implemented by four independent
+  cores in Go, Rust, Python, and Node.
+authors:
+  - family-names: Šotek
+    given-names: Miroslav
+    orcid: "https://orcid.org/0009-0009-3560-0851"
+    affiliation: ANULUM
+keywords:
+  - command-output
+  - redaction
+  - prompt-automation
+  - privacy
+  - cli
+  - polyglot
