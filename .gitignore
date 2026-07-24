@@ -32,3 +32,11 @@ cores/core-node/dist/
 
 # Benchmark scratch binaries (results JSON is tracked)
 benchmarks/bin/
+CLAUDE.md
+.claude/
+.env
+BACKUP/
+ARCHIVE/
+.coordination/
+
+docs/internal/**
