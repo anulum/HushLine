@@ -24,6 +24,15 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
+    ignore:
+      # The type definitions follow the Node 22 runtime that CI and the
+      # package target; a newer major would admit APIs that runtime lacks.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # TypeScript 7 removes `moduleResolution: node10`, which tsconfig.json
+      # uses. The migration is a planned change of its own, not a bump.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: cargo
     directory: /cores/core-rust
     schedule:
