@@ -41,8 +41,10 @@ Keep a Changelog, and the project adheres to Semantic Versioning.
 - Every external GitHub Action is pinned by commit hash; a policy test refuses
   tag and branch references and `pip install` without hashes.
 - Rust core lock: `regex` 1.13.1, `serde` 1.0.229, `serde_json` 1.0.151.
-- Workflows: `actions/checkout` 7.0.1, `actions/setup-go` 7.0.0,
-  `actions/upload-artifact` 7.0.1.
+- Workflows: every pinned action updated to its current release (checkout
+  7.0.1, setup-go 7.0.0, setup-node 7.0.0, setup-python 7.0.0, upload-artifact
+  7.0.1, codecov-action 7.1.1, scorecard-action 2.4.4, codeql-action 4.38.2,
+  gh-action-pypi-publish 1.14.2, install-action 2.87.24).
 
 ## [0.1.0] - 2026-05-31
 
