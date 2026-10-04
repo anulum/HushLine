@@ -31,7 +31,7 @@
     "start": "node dist/src/cli.js"
   },
   "devDependencies": {
-    "typescript": "^5.8.0",
+    "typescript": "^7.0.2",
     "@types/node": "^22.0.0"
   }
 }
