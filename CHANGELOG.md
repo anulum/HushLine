@@ -26,6 +26,10 @@ Keep a Changelog, and the project adheres to Semantic Versioning.
   compliance.
 - `CITATION.cff`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and this changelog.
 - OpenSSF Scorecard workflow and README status badges.
+- A blocking advisory audit of every committed dependency lock in CI
+  (`lock-audit` job: `npm audit` for the Node core, `cargo audit` for the Rust
+  core), with two control locks that must fail the audit and a policy test that
+  pins the audit commands.
 
 ### Changed
 

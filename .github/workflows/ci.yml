@@ -130,3 +130,27 @@ jobs:
         run: npm ci
       - name: test
         run: npm test
+
+  lock-audit:
+    # Every committed dependency lock is audited against its advisory database
+    # at every head. A finding fails the job; there is no severity threshold.
+    # cores/core-python/tests/test_lock_audit_policy.py pins these commands.
+    name: lock-audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - name: install cargo-audit
+        uses: taiki-e/install-action@83ac0ad63c0167e6f06796fab0fce28db1bf3db0 # v2.87.22
+        with:
+          tool: cargo-audit
+      - name: audit the Node lock
+        run: npm audit --package-lock-only --prefix cores/core-node
+      - name: audit the Rust lock
+        run: cargo audit --deny warnings --file cores/core-rust/Cargo.lock
+      - name: control locks with a published advisory fail the audit
+        run: bash tools/check_lock_audit_controls.sh

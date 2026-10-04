@@ -27,18 +27,43 @@ test -z "$(gofmt -s -l .)"
 The Go coverage gate is intentionally high. New production code must carry
 behavioural tests in the same change unless the change is documentation-only.
 
+## Dependency-lock audit
+
+CI audits every committed dependency lock against its advisory database on each
+push and pull request to `main` (`lock-audit` job). A finding fails the job;
+there is no severity threshold.
+
+```bash
+npm audit --package-lock-only --prefix cores/core-node
+cargo audit --deny warnings --file cores/core-rust/Cargo.lock
+bash tools/check_lock_audit_controls.sh
+```
+
+The third command audits two control locks under `tools/lock_audit_controls/`,
+each pinning one release with a published advisory. Both audits must fail and
+their reports must name the finding. `npm audit` and `cargo audit` also exit
+non-zero when they cannot run, so the exit status alone is not accepted.
+
+`cores/core-python/tests/test_lock_audit_policy.py` pins the audit commands. It
+fails when a committed lock has no audit step, when a command changes, or when
+a lock of a kind without an audit route (for example `go.sum`) is committed. To
+add a lock, add its audit step and its route in that test in the same change.
+
 ## Required remote gates
 
 Protected `main` requires:
 
-- `test-and-build` status check.
+- The `core-go`, `core-python`, `core-rust`, `core-node` and `lock-audit`
+  status checks.
 - Strict branch synchronisation before merge.
 - One approving review.
 - Resolved conversations.
 - Linear history.
 - No force pushes.
 - No branch deletions.
-- Admin enforcement.
+
+A repository administrator may push to `main` directly. A failing run on the
+pushed head is fixed forward before any further work.
 
 Security checks expected on `main`:
 

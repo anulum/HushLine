@@ -1,0 +1,16 @@
+# Negative control for the lock audit in CI: one release with a published
+# advisory (RUSTSEC-2020-0071). The audit of this file must fail. Never build it.
+version = 3
+
+[[package]]
+name = "advisory-control"
+version = "0.0.0"
+dependencies = [
+ "time",
+]
+
+[[package]]
+name = "time"
+version = "0.1.43"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
