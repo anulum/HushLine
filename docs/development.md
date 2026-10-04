@@ -35,19 +35,37 @@ there is no severity threshold.
 
 ```bash
 npm audit --package-lock-only --prefix cores/core-node
+python -m pip_audit --strict --require-hashes --disable-pip --progress-spinner=off -r cores/core-python/requirements/audit.txt
+python -m pip_audit --strict --require-hashes --disable-pip --progress-spinner=off -r cores/core-python/requirements/dev.txt
 cargo audit --deny warnings --file cores/core-rust/Cargo.lock
 bash tools/check_lock_audit_controls.sh
 ```
 
-The third command audits two control locks under `tools/lock_audit_controls/`,
-each pinning one release with a published advisory. Both audits must fail and
-their reports must name the finding. `npm audit` and `cargo audit` also exit
-non-zero when they cannot run, so the exit status alone is not accepted.
+The last command audits three control locks under `tools/lock_audit_controls/`,
+each pinning one release with a published advisory. Every audit must fail and
+its report must name the finding. The audit tools also exit non-zero when they
+cannot run, so the exit status alone is not accepted.
+
+`pip-audit` skips a pin whose environment marker is false on the interpreter it
+runs on, and still exits 0. The Python locks are compiled for one interpreter
+and platform and hold no marked pin; the policy test fails if one appears.
 
 `cores/core-python/tests/test_lock_audit_policy.py` pins the audit commands. It
 fails when a committed lock has no audit step, when a command changes, or when
 a lock of a kind without an audit route (for example `go.sum`) is committed. To
 add a lock, add its audit step and its route in that test in the same change.
+
+## Pinned workflow code
+
+Every external action in `.github/workflows/` is referenced by a full commit
+hash, with the version in a trailing comment. Every `pip install` in a workflow
+installs from a hash-locked file under `cores/core-python/requirements/` with
+`--require-hashes`. `cores/core-python/tests/test_workflow_pins.py` fails on a
+tag or branch reference and on an install without hashes.
+
+The locks are regenerated with the command in the first line of each file.
+`.github/dependabot.yml` proposes updates weekly; an update lands as a normal
+reviewed change.
 
 ## Required remote gates
 

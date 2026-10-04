@@ -50,4 +50,19 @@ if (!findings.some((finding) => finding.package.name === "time")) {
 }
 ' "${work}/cargo-report.json"
 
-echo "both control locks fail the audit with a named finding"
+status=0
+python -m pip_audit --strict --require-hashes --disable-pip --progress-spinner=off -r "${controls}/pip-advisory-control.lock" -f json -o "${work}/pip-report.json" || status=$?
+if [[ "${status}" -ne 1 ]]; then
+  echo "pip-audit exited ${status} on the control lock, expected 1" >&2
+  exit 1
+fi
+node -e '
+const report = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+const named = report.dependencies.filter((entry) => entry.name === "urllib3" && entry.vulns.length > 0);
+if (named.length !== 1) {
+  console.error("pip-audit named no finding for the control lock");
+  process.exit(1);
+}
+' "${work}/pip-report.json"
+
+echo "all three control locks fail the audit with a named finding"

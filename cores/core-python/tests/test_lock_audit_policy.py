@@ -34,6 +34,11 @@ ROUTES = {
     "package-lock.json": "npm audit --package-lock-only --prefix {directory}",
     "Cargo.lock": "cargo audit --deny warnings --file {path}",
 }
+PIP_AUDIT = "python -m pip_audit --strict --require-hashes --disable-pip --progress-spinner=off"
+AUDIT_TOOL_LOCK = "cores/core-python/requirements/audit.txt"
+INSTALL_AUDIT_TOOL = (
+    f"python -m pip install --disable-pip-version-check --require-hashes -r {AUDIT_TOOL_LOCK}"
+)
 OTHER_LOCK_NAMES = frozenset(
     {
         "Pipfile.lock",
@@ -90,11 +95,23 @@ def _locks() -> list[str]:
     return sorted(locks)
 
 
-def _audit_command(lock: str) -> str:
+def _audit_command(lock: str, *, hashed: bool = False) -> str:
     """Return the one admitted audit command for a lock."""
     path = PurePosixPath(lock)
+    if hashed:
+        return f"{PIP_AUDIT} -r {lock}"
     assert path.name in ROUTES, f"{lock}: no audit route is defined for this kind of lock"
     return ROUTES[path.name].format(path=lock, directory=path.parent)
+
+
+def _hashed(lock: str) -> bool:
+    return HASHED_PIN.search((ROOT / lock).read_text(encoding="utf-8")) is not None
+
+
+def _marked_pins(text: str) -> list[str]:
+    """Return the pins of a hash lock that carry an environment marker."""
+    heads = [line for line in text.splitlines() if line and line[0] not in "# "]
+    return [head for head in heads if ";" in head]
 
 
 def _job(text: str, name: str) -> list[str]:
@@ -134,9 +151,29 @@ def test_the_audit_job_has_no_non_blocking_marker() -> None:
 
 def test_every_committed_lock_is_audited_by_its_pinned_command() -> None:
     locks = _locks()
-    assert locks == ["cores/core-node/package-lock.json", "cores/core-rust/Cargo.lock"]
-    expected = [_audit_command(lock) for lock in locks]
-    assert _runs(_job(_workflow(), "lock-audit")) == [*expected, f"bash {CONTROL_SCRIPT}"]
+    assert locks == [
+        "cores/core-node/package-lock.json",
+        AUDIT_TOOL_LOCK,
+        "cores/core-python/requirements/dev.txt",
+        "cores/core-rust/Cargo.lock",
+    ]
+    expected = [_audit_command(lock, hashed=_hashed(lock)) for lock in locks]
+    assert _runs(_job(_workflow(), "lock-audit")) == [
+        INSTALL_AUDIT_TOOL,
+        *expected,
+        f"bash {CONTROL_SCRIPT}",
+    ]
+
+
+def test_no_hash_lock_holds_a_pin_that_one_audit_leg_would_skip() -> None:
+    # pip-audit skips a pin whose environment marker is false on the running
+    # interpreter and still exits 0. The job has one Python leg, so a hash lock
+    # with a marked pin would be audited only in part.
+    for lock in _locks():
+        if _hashed(lock):
+            assert _marked_pins((ROOT / lock).read_text(encoding="utf-8")) == [], lock
+    marked = "colorama==0.4.6 ; sys_platform == 'win32' \\\n    --hash=sha256:00\nidna==3.20 \\\n"
+    assert _marked_pins(marked) == ["colorama==0.4.6 ; sys_platform == 'win32' \\"]
 
 
 def test_a_lock_without_an_audit_route_is_refused() -> None:
@@ -163,9 +200,12 @@ def test_the_controls_use_the_audited_commands_and_read_the_report() -> None:
     assert 'npm audit --package-lock-only --prefix "${work}/npm" --json' in script
     cargo = 'cargo audit --deny warnings --file "${controls}/cargo-advisory-control.lock" --json'
     assert cargo in script
-    assert script.count('if [[ "${status}" -ne 1 ]]; then') == 2
+    pip = f'{PIP_AUDIT} -r "${{controls}}/pip-advisory-control.lock" -f json'
+    assert pip in script
+    assert script.count('if [[ "${status}" -ne 1 ]]; then') == 3
     assert "report.vulnerabilities.lodash" in script
     assert 'finding.package.name === "time"' in script
+    assert 'entry.name === "urllib3" && entry.vulns.length > 0' in script
     assert "|| true" not in script
 
 
@@ -175,6 +215,7 @@ def test_the_control_locks_pin_one_release_with_a_published_advisory() -> None:
         "cargo-advisory-control.lock",
         "npm-advisory-control.lock.json",
         "npm-advisory-control.package.json",
+        "pip-advisory-control.lock",
     ]
     assert sorted(name for name in tracked if name.startswith(CONTROL_DIR)) == [
         CONTROL_DIR + name for name in names
@@ -185,5 +226,7 @@ def test_the_control_locks_pin_one_release_with_a_published_advisory() -> None:
     cargo = (ROOT / CONTROL_DIR / names[0]).read_text(encoding="utf-8")
     assert re.findall(r'^name = "(.+)"$', cargo, re.MULTILINE) == ["advisory-control", "time"]
     assert 'version = "0.1.43"' in cargo
+    pip = (ROOT / CONTROL_DIR / names[3]).read_text(encoding="utf-8")
+    assert [line for line in pip.splitlines() if line[0] not in "# "] == ["urllib3==1.26.4 \\"]
     # The controls are only ever audited: no workflow names them except through the script.
     assert CONTROL_DIR not in _workflow()
